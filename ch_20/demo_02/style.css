@@ -1,0 +1,11 @@
+#heading {
+    color: green !important;
+}
+
+#heading::before {
+    content: "Hello";
+
+    font-size: 100px;
+
+    color: rgb(235, 235, 235);
+}
