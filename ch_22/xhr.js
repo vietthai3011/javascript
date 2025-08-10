@@ -1,64 +1,47 @@
-// function sendRequest(method, url, callback) {
-//     const xhr = new XMLHttpRequest();
-//     xhr.open(method, url, true);
-//     xhr.send();
+function sendRequest(method, url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url, true);
+    xhr.send();
 
-//     xhr.onload = function () {
-//         if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status <= 400) {
-//             if (typeof callback === "function") callback(xhr.responseText);
-//         }
-//     };
-// }
-
-function sendRequest(method, url) {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open(method, url, true);
-        xhr.send();
-
-        xhr.onload = function () {
-            if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status <= 400) {
-                resolve(xhr.responseText);
-            } else reject("error");
-        };
-    });
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status <= 400) {
+            if (typeof callback === "function") callback(xhr.responseText);
+        }
+    };
 }
 
-const header = document.querySelector("#header");
-const ProductList = document.createElement("header");
+const header = document.getElementById("header");
+const footer = document.getElementById("footer");
+const productList = document.getElementById("product-list");
 
-sendRequest("GET", "./partials/header.html").then((responseText) => {
-    header.innerHTML = responseText;
-});
+sendRequest("GET", "./partials/header.html", (responseText) => (header.innerHTML = responseText));
+sendRequest("GET", "./partials/footer.html", (responseText) => (footer.innerHTML = responseText));
 
-const productList = document.querySelector(".product-list");
-sendRequest("get", "https://api01.f8team.dev/api/products").then((responseText) => {
+sendRequest("GET", "https://api01.f8team.dev/api/address/provinces", (responseText) => {
     const response = JSON.parse(responseText);
+    const provinces = response.data;
+    const firstProvince = provinces[0];
+    console.log(provinces);
 
-    const products = response.data.items;
+    sendRequest(
+        "GET",
+        `https://api01.f8team.dev/api/address/districts?province_id=${firstProvince.province_id}`,
+        (responseText) => {
+            const response = JSON.parse(responseText);
+            const districts = response.data;
+            const firstDistrict = districts[0];
+            console.log(districts);
 
-    html = products.forEach((product) => {
-        const li = document.createElement("li");
-        li.innerText = product.title;
-
-        productList.appendChild(li);
-    });
+            sendRequest(
+                "GET",
+                `https://api01.f8team.dev/api/address/wards?district_id=${firstDistrict.district_id}`,
+                (responseText) => {
+                    const response = JSON.parse(responseText);
+                    const wards = response.data;
+                    const firstWard = wards[0];
+                    console.log(wards);
+                }
+            );
+        }
+    );
 });
-
-const promise = new Promise((resolve, reject) => {
-    resolve("Hello");
-});
-
-// promise
-//     .then((result) => {
-//         console.log("done: ", result);
-//         return new Promise((_, reject) => {
-//             setTimeout(() => {
-//                 reject("Hello 123");
-//             }, 3000);
-//         });
-//     })
-//     .then((result) => console.log("done 2: ", result))
-//     .catch((error) => console.log("error: ", error));
-
-
