@@ -1,0 +1,24 @@
+{
+  "tasks": [
+    {
+      "id": "b8d1",
+      "title": "Lau nhà",
+      "completed": false
+    },
+    {
+      "id": "ba52",
+      "title": "Rửa bát",
+      "completed": false
+    },
+    {
+      "id": "3ab8",
+      "title": "Nấu cơm",
+      "completed": true
+    },
+    {
+      "id": "af8e",
+      "title": "Quét nhà",
+      "completed": false
+    }
+  ]
+}

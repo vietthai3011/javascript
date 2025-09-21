@@ -1,0 +1,11 @@
+### Create task
+POST http://localhost:3000/tasks HTTP/1.1
+content-type: application/json
+{
+    "title": "Nấu cơm",
+    "completed": true
+}
+
+### Get all tasks
+GET http://localhost:3000/tasks HTTP/1.1
+Content-Type: application/json
